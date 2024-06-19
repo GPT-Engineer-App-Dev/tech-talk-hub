@@ -1,15 +1,24 @@
-import { Box, Container, Flex, Heading, Text, VStack, Link, HStack, Divider } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Text, VStack, Link, HStack, Divider, Button } from "@chakra-ui/react";
 import { FaHome, FaLaptopCode, FaMobileAlt, FaDatabase, FaCloud, FaRobot } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Index = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem('posts')) || [];
+    setPosts(storedPosts);
+  }, []);
+
   return (
     <Container maxW="container.xl" p={4}>
       <Flex as="nav" bg="blue.500" color="white" p={4} justifyContent="space-between" alignItems="center">
         <Heading size="md">Tech Forum</Heading>
         <HStack spacing={4}>
-          <Link href="#" color="white">Home</Link>
-          <Link href="#" color="white">About</Link>
-          <Link href="#" color="white">Contact</Link>
+          <Link as={RouterLink} to="/" color="white">Home</Link>
+          <Link as={RouterLink} to="#" color="white">About</Link>
+          <Link as={RouterLink} to="#" color="white">Contact</Link>
         </HStack>
       </Flex>
 
@@ -17,9 +26,18 @@ const Index = () => {
         <Heading as="h1" size="xl">Welcome to the Tech Forum</Heading>
         <Text fontSize="lg">Discuss the latest in technology with fellow enthusiasts.</Text>
 
+        <Button as={RouterLink} to="/create-post" colorScheme="blue">Create New Post</Button>
+
         <Divider />
 
         <VStack spacing={4} align="stretch" w="full">
+          {posts.map((post, index) => (
+            <Box key={index} p={4} shadow="md" borderWidth="1px">
+              <Heading size="md">{post.title}</Heading>
+              <Text mt={2}>{post.content}</Text>
+            </Box>
+          ))}
+
           <Box p={4} shadow="md" borderWidth="1px">
             <HStack spacing={4}>
               <FaLaptopCode size="24px" />
